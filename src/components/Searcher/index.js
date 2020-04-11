@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import api from '../../services/api';
 import * as S from './styles';
 import currencies from './currencies';
@@ -14,48 +14,55 @@ const Searcher = () => {
     value: currency,
     label: currency,
   }));
+  useEffect(() => {
+    async function getExchangeRates() {
+      try {
+        const response = await api.get(`/latest?base=${from}`);
+        setExchangeRates(response.data.rates);
+        handleConversion(from, to);
+      } catch (e) {}
+    }
+    getExchangeRates();
+  }, [from]);
 
-  async function handleFromChange({ value }) {
+  function handleFromChange({ value }) {
     setFrom(value);
-    try {
-      const response = await api.get(`/latest?base=${value}`);
-      setExchangeRates(response.data.rates);
-      handleConversion();
-    } catch (e) {}
+    handleConversion(value, to);
   }
   function handleToChange({ value }) {
     setTo(value);
-    handleConversion();
+    handleConversion(from, value);
   }
-  function handleConversion() {
-    if (from && to) {
-      let converted = exchangeRates[to] * fromValue;
-      console.log(exchangeRates, to);
+  function handleFromFieldChange({ target: { value } }) {
+    setFromValue(value);
+    handleConversion(from, to);
+  }
+  function handleToFieldChange({ target: { value } }) {
+    setToValue(value);
+    handleConversion(from, to);
+  }
+  function handleConversion(fromCurrency, toCurrency) {
+    if (fromCurrency && toCurrency) {
+      let converted = exchangeRates[toCurrency] * fromValue;
       setToValue(converted);
     }
   }
   return (
     <S.SearcherWrapper>
-      <S.SearcherField
-        value={fromValue}
-        onChange={e => setFromValue(e.target.value)}
-      />
+      <S.SearcherField value={fromValue} onChange={handleFromFieldChange} />
       <label htmlFor="from">From: </label>
       <S.SearcherSelect
         options={currenciesOptions}
-        value={{ value: from, label: from }}
+        defaultValue={{ value: from, label: from }}
         onChange={handleFromChange}
       />
       <label htmlFor="to">To: </label>
       <S.SearcherSelect
         options={currenciesOptions}
         onChange={handleToChange}
-        value={{ value: to, label: to }}
+        defaultValue={{ value: to, label: to }}
       />
-      <S.SearcherField
-        value={toValue}
-        onChange={e => setToValue(e.target.value)}
-      />
+      <S.SearcherField value={toValue} onChange={handleToFieldChange} />
     </S.SearcherWrapper>
   );
 };
