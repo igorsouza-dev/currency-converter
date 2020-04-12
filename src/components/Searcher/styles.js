@@ -23,3 +23,8 @@ export const SearcherField = styled.input`
   font-size: 1.5rem;
   border-bottom: solid 1px #4d4d4d;
 `;
+
+export const ConvertedValueLabel = styled.p`
+  font-size: 2rem;
+  font-weight: bold;
+`;

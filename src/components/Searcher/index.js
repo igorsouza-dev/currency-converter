@@ -14,12 +14,16 @@ const Searcher = () => {
     value: currency,
     label: currency,
   }));
+
   useEffect(() => {
     async function getExchangeRates() {
       try {
         const response = await api.get(`/latest?base=${from}`);
-        setExchangeRates(response.data.rates);
-        handleConversion(from, to);
+        const { rates } = response.data;
+        setExchangeRates(rates);
+        if (to && fromValue) {
+          setToValue(convert(rates[to], fromValue));
+        }
       } catch (e) {}
     }
     getExchangeRates();
@@ -27,42 +31,35 @@ const Searcher = () => {
 
   function handleFromChange({ value }) {
     setFrom(value);
-    handleConversion(value, to);
   }
   function handleToChange({ value }) {
     setTo(value);
-    handleConversion(from, value);
+    if (fromValue) {
+      setToValue(convert(exchangeRates[value], fromValue));
+    }
   }
   function handleFromFieldChange({ target: { value } }) {
     setFromValue(value);
-    handleConversion(from, to);
+    setToValue(convert(exchangeRates[to], value));
   }
-  function handleToFieldChange({ target: { value } }) {
-    setToValue(value);
-    handleConversion(from, to);
-  }
-  function handleConversion(fromCurrency, toCurrency) {
-    if (fromCurrency && toCurrency) {
-      let converted = exchangeRates[toCurrency] * fromValue;
-      setToValue(converted);
-    }
+  function convert(a, b) {
+    let converted = parseFloat(a) * parseFloat(b);
+    return converted;
   }
   return (
     <S.SearcherWrapper>
       <S.SearcherField value={fromValue} onChange={handleFromFieldChange} />
-      <label htmlFor="from">From: </label>
       <S.SearcherSelect
         options={currenciesOptions}
         defaultValue={{ value: from, label: from }}
         onChange={handleFromChange}
       />
-      <label htmlFor="to">To: </label>
       <S.SearcherSelect
         options={currenciesOptions}
         onChange={handleToChange}
         defaultValue={{ value: to, label: to }}
       />
-      <S.SearcherField value={toValue} onChange={handleToFieldChange} />
+      <S.ConvertedValueLabel>{toValue}</S.ConvertedValueLabel>
     </S.SearcherWrapper>
   );
 };
