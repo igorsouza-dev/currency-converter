@@ -29,11 +29,19 @@ export const SearcherButton = styled.button`
   background: #65a8c2;
   border-radius: 5px;
   width: 68px;
+  border: 0;
+  outline: 0;
+  cursor: pointer;
+  transition: background 0.5s ease-out;
+  &:hover {
+    background: #337191;
+  }
 `;
 
 export const SearcherField = styled.input`
   font-size: 2rem;
   border: 0;
+  outline: 0;
   border-bottom: solid 1px #f7f6f3;
   width: 100%;
   margin-bottom: 20px;
