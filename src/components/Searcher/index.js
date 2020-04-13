@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import api from '../../services/api';
 import * as S from './styles';
 import currencies from './currencies';
-
+import { ExchangeAlt } from '@styled-icons/fa-solid/ExchangeAlt';
 const Searcher = () => {
   const [from, setFrom] = useState('USD');
   const [to, setTo] = useState('BRL');
@@ -44,21 +44,34 @@ const Searcher = () => {
   }
   function convert(a, b) {
     let converted = parseFloat(a) * parseFloat(b);
-    return converted;
+    return converted.toFixed(2);
+  }
+  function switchCurrency() {
+    let aux = from;
+    setFrom(to);
+    setTo(aux);
   }
   return (
     <S.SearcherWrapper>
       <S.SearcherField value={fromValue} onChange={handleFromFieldChange} />
-      <S.SearcherSelect
-        options={currenciesOptions}
-        defaultValue={{ value: from, label: from }}
-        onChange={handleFromChange}
-      />
-      <S.SearcherSelect
-        options={currenciesOptions}
-        onChange={handleToChange}
-        defaultValue={{ value: to, label: to }}
-      />
+      <S.FieldsContainer>
+        <S.SearcherSelect
+          options={currenciesOptions}
+          defaultValue={{ value: from, label: from }}
+          value={{ value: from, label: from }}
+          onChange={handleFromChange}
+        />
+        <S.SearcherButton onClick={switchCurrency}>
+          <ExchangeAlt size={24} color="#f7f6f3" />
+        </S.SearcherButton>
+        <S.SearcherSelect
+          options={currenciesOptions}
+          onChange={handleToChange}
+          value={{ value: to, label: to }}
+          defaultValue={{ value: to, label: to }}
+        />
+      </S.FieldsContainer>
+
       <S.ConvertedValueLabel>{toValue}</S.ConvertedValueLabel>
     </S.SearcherWrapper>
   );

@@ -1,6 +1,8 @@
 import { createGlobalStyle } from 'styled-components';
 
 export const GlobalStyles = createGlobalStyle`
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300;500;700&display=swap');
+
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
@@ -26,12 +28,18 @@ article, aside, details, figcaption, figure,
 footer, header, hgroup, menu, nav, section {
 	display: block;
 }
+html, body, #___gatsby {
+	height: 100%;
+	font-family: 'Roboto Mono', monospace;
+}
 body {
 	line-height: 1;
   font-size: 100%;
-  font-family: --apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-	transition: background 0.5s;
+	background: #4889A7;
+	height: 100vh;
+	color: #F7F6F3;
 }
+
 ol, ul {
 	list-style: none;
 }

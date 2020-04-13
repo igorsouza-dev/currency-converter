@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { useStaticQuery, graphql } from 'gatsby';
+import { Link, useStaticQuery, graphql } from 'gatsby';
 
-import Header from './header';
-import { GlobalStyles } from '../styles/global';
+import Header from '../Header';
+import { GlobalStyles } from '../../styles/global';
+import * as S from './styles';
 
 const Layout = ({ children }) => {
   const data = useStaticQuery(graphql`
@@ -20,10 +21,13 @@ const Layout = ({ children }) => {
     <>
       <Header siteTitle={data.site.siteMetadata.title} />
       <GlobalStyles />
-      <div>
-        <main>{children}</main>
-        <footer>© {new Date().getFullYear()}, Igor Souza</footer>
-      </div>
+      <S.LayoutWrapper>
+        <S.Main>{children}</S.Main>
+        <S.Footer>
+          © {new Date().getFullYear()},
+          <a href="https://github.com/igorsouza-dev/">Igor Souza</a>
+        </S.Footer>
+      </S.LayoutWrapper>
     </>
   );
 };
