@@ -1,7 +1,7 @@
 module.exports = {
   siteMetadata: {
-    title: `Currency Converter`,
-    description: `A simple currency converter`,
+    title: `Currency Exchanger`,
+    description: `A simple currency exchanger app`,
     author: `@igorsouza-dev`,
   },
   plugins: [

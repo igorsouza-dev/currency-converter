@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import api from '../../services/api';
 import * as S from './styles';
 import currencies from './currencies';
@@ -14,7 +14,14 @@ const Searcher = () => {
     value: currency,
     label: currency,
   }));
-
+  const displayValue = useMemo(
+    () =>
+      new Intl.NumberFormat('us-EN', {
+        style: 'currency',
+        currency: to,
+      }).format(toValue),
+    [toValue, to]
+  );
   useEffect(() => {
     async function getExchangeRates() {
       try {
@@ -72,7 +79,7 @@ const Searcher = () => {
         />
       </S.FieldsContainer>
 
-      <S.ConvertedValueLabel>{toValue}</S.ConvertedValueLabel>
+      <S.ConvertedValueLabel>{displayValue}</S.ConvertedValueLabel>
     </S.SearcherWrapper>
   );
 };
