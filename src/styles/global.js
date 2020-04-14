@@ -28,7 +28,7 @@ article, aside, details, figcaption, figure,
 footer, header, hgroup, menu, nav, section {
 	display: block;
 }
-html, body, #___gatsby {
+html, body, #___gatsby, #gatsby-focus-wrapper {
 	height: 100%;
 	font-family: 'Roboto Mono', monospace;
 }
@@ -39,7 +39,9 @@ body {
 	height: 100vh;
 	color: #F7F6F3;
 }
-
+div[role="group"][tabindex] {
+    height: 100%;
+}
 ol, ul {
 	list-style: none;
 }

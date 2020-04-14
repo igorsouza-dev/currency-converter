@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import media from 'styled-media-query';
 
 export const HeaderWrapper = styled.div`
   display: flex;
@@ -23,4 +24,7 @@ export const Title = styled.h1`
       margin-right: 10px;
     }
   }
+  ${media.lessThan('small')`
+    font-size: 1.5rem;
+  `}
 `;

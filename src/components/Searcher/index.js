@@ -3,6 +3,7 @@ import api from '../../services/api';
 import * as S from './styles';
 import currencies from './currencies';
 import { ExchangeAlt } from '@styled-icons/fa-solid/ExchangeAlt';
+import { Equals } from '@styled-icons/fa-solid/Equals';
 const Searcher = () => {
   const [from, setFrom] = useState('USD');
   const [to, setTo] = useState('BRL');
@@ -51,6 +52,9 @@ const Searcher = () => {
   }
   function convert(a, b) {
     let converted = parseFloat(a) * parseFloat(b);
+    if (!converted) {
+      converted = 0;
+    }
     return converted.toFixed(2);
   }
   function switchCurrency() {
@@ -60,8 +64,7 @@ const Searcher = () => {
   }
   return (
     <S.SearcherWrapper>
-      <S.SearcherField value={fromValue} onChange={handleFromFieldChange} />
-      <S.FieldsContainer>
+      <S.ControlsContainer>
         <S.SearcherSelect
           options={currenciesOptions}
           defaultValue={{ value: from, label: from }}
@@ -77,9 +80,13 @@ const Searcher = () => {
           value={{ value: to, label: to }}
           defaultValue={{ value: to, label: to }}
         />
-      </S.FieldsContainer>
+      </S.ControlsContainer>
+      <S.FieldsContainer>
+        <S.SearcherField value={fromValue} onChange={handleFromFieldChange} />
+        <Equals size={48} color="white" />
 
-      <S.ConvertedValueLabel>{displayValue}</S.ConvertedValueLabel>
+        <S.ConvertedValueLabel>{displayValue}</S.ConvertedValueLabel>
+      </S.FieldsContainer>
     </S.SearcherWrapper>
   );
 };
