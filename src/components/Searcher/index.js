@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { ExchangeAlt } from '@styled-icons/fa-solid/ExchangeAlt';
 import { Equals } from '@styled-icons/fa-solid/Equals';
-
+import { parseISO, format } from 'date-fns';
 import api from '../../services/api';
 import * as S from './styles';
 
@@ -11,6 +11,9 @@ import { parseNumber, formatNumber } from './parser';
 const Searcher = () => {
   const [from, setFrom] = useState('USD');
   const [to, setTo] = useState('BRL');
+  const [resultDate, setResultDate] = useState(
+    new Date().toISOString().substr(0, 10)
+  );
   const [fromValue, setFromValue] = useState(1);
   const [toValue, setToValue] = useState(0);
   const [exchangeRates, setExchangeRates] = useState({});
@@ -31,19 +34,27 @@ const Searcher = () => {
     [toValue, to]
   );
 
+  const displayDate = useMemo(() => {
+    return format(parseISO(resultDate), 'MMM d, yyyy');
+  }, [resultDate]);
+
   useEffect(() => {
     async function getExchangeRates() {
       setLoading(true);
       setError('');
       try {
         const response = await api.get(`/latest?base=${from}`);
-        const { rates } = response.data;
+        const { rates, date } = response.data;
+        setResultDate(date);
         setExchangeRates(rates);
         if (to && fromValue) {
           setToValue(convert(rates[to], parseNumber(fromValue)));
           setFromValue(formatNumber(fromValue, from));
         }
       } catch (e) {
+        if (process.node.ENV === 'development') {
+          console.error(e.message);
+        }
         setError('Sorry, something is wrong :(');
       }
       setLoading(false);
@@ -123,6 +134,13 @@ const Searcher = () => {
           {loading ? 'Loading...' : error ? error : displayValue}
         </S.ConvertedValueLabel>
       </S.FieldsContainer>
+      <S.Info>
+        <p>Data from {displayDate}</p>
+        <p>
+          Provided by{' '}
+          <a href="https://exchangeratesapi.io/">Foreign Exchange Rates API </a>
+        </p>
+      </S.Info>
     </S.SearcherWrapper>
   );
 };

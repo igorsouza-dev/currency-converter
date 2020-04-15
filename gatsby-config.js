@@ -1,7 +1,7 @@
 module.exports = {
   siteMetadata: {
-    title: `Currency Exchanger`,
-    description: `A simple currency exchanger app`,
+    title: `Currency Converter`,
+    description: `A simple currency converter app`,
     author: `@igorsouza-dev`,
   },
   plugins: [
@@ -19,8 +19,8 @@ module.exports = {
     {
       resolve: `gatsby-plugin-manifest`,
       options: {
-        name: `Currency Exchanger`,
-        short_name: `Currency Exchanger`,
+        name: `Currency Converter`,
+        short_name: `Currency Converter`,
         start_url: `/`,
         background_color: `#4889A7`,
         theme_color: `#4889A7`,

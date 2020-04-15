@@ -11,7 +11,7 @@ export const SearcherWrapper = styled.div`
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  max-width: 460px;
+  margin: 0 20px;
   width: 100%;
   padding: 5px 40px;
 `;
@@ -23,6 +23,7 @@ export const ControlsContainer = styled.div`
   justify-content: space-around;
   width: 100%;
   margin: 2rem 0rem;
+  max-width: 400px;
 `;
 
 export const FieldsContainer = styled.div`
@@ -38,8 +39,8 @@ export const FieldsContainer = styled.div`
   }
 
   ${media.lessThan('large')`
-    max-width: 400px;
-    
+    /*max-width: 400px;
+    */
   `}
 `;
 export const SearcherButton = styled.button`
@@ -65,11 +66,16 @@ export const SearcherField = styled.input`
   color: #f7f6f3;
   background: #337191;
   width: 100%;
+  max-width: 480px;
   padding: 5px;
   border-radius: 4px;
   font-weight: 700;
   font-family: 'Roboto Mono', monospace;
   text-align: center;
+
+  ${media.lessThan('small')`
+    font-size: 1.5rem;
+  `}
 `;
 
 export const ConvertedValueLabel = styled.p`
@@ -82,4 +88,26 @@ export const ConvertedValueLabel = styled.p`
   ${media.lessThan('medium')`
     font-size: 3rem;
   `}
+  ${media.lessThan('small')`
+    font-size: 2rem;
+  `}
+`;
+
+export const Info = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  margin-top: 90px;
+
+  p {
+    color: #232323;
+
+    a {
+      text-decoration: underline;
+      color: #ddd;
+      font-weight: bold;
+    }
+  }
 `;
