@@ -14,6 +14,8 @@ const Searcher = () => {
   const [fromValue, setFromValue] = useState(1);
   const [toValue, setToValue] = useState(0);
   const [exchangeRates, setExchangeRates] = useState({});
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
   const currenciesOptions = currencies.map(currency => ({
     value: currency,
@@ -31,6 +33,8 @@ const Searcher = () => {
 
   useEffect(() => {
     async function getExchangeRates() {
+      setLoading(true);
+      setError('');
       try {
         const response = await api.get(`/latest?base=${from}`);
         const { rates } = response.data;
@@ -39,7 +43,10 @@ const Searcher = () => {
           setToValue(convert(rates[to], parseNumber(fromValue)));
           setFromValue(formatNumber(fromValue, from));
         }
-      } catch (e) {}
+      } catch (e) {
+        setError('Sorry, something is wrong :(');
+      }
+      setLoading(false);
     }
     getExchangeRates();
   }, [from]);
@@ -112,7 +119,9 @@ const Searcher = () => {
         />
         <Equals size={48} color="white" />
 
-        <S.ConvertedValueLabel>{displayValue}</S.ConvertedValueLabel>
+        <S.ConvertedValueLabel>
+          {loading ? 'Loading...' : error ? error : displayValue}
+        </S.ConvertedValueLabel>
       </S.FieldsContainer>
     </S.SearcherWrapper>
   );
