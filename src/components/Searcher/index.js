@@ -1,9 +1,13 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import api from '../../services/api';
-import * as S from './styles';
-import currencies from './currencies';
 import { ExchangeAlt } from '@styled-icons/fa-solid/ExchangeAlt';
 import { Equals } from '@styled-icons/fa-solid/Equals';
+
+import api from '../../services/api';
+import * as S from './styles';
+
+import currencies from './currencies';
+import { parseNumber, formatNumber } from './parser';
+
 const Searcher = () => {
   const [from, setFrom] = useState('USD');
   const [to, setTo] = useState('BRL');
@@ -15,6 +19,7 @@ const Searcher = () => {
     value: currency,
     label: currency,
   }));
+
   const displayValue = useMemo(
     () =>
       new Intl.NumberFormat('us-EN', {
@@ -23,6 +28,7 @@ const Searcher = () => {
       }).format(toValue),
     [toValue, to]
   );
+
   useEffect(() => {
     async function getExchangeRates() {
       try {
@@ -30,7 +36,8 @@ const Searcher = () => {
         const { rates } = response.data;
         setExchangeRates(rates);
         if (to && fromValue) {
-          setToValue(convert(rates[to], fromValue));
+          setToValue(convert(rates[to], parseNumber(fromValue)));
+          setFromValue(formatNumber(fromValue, from));
         }
       } catch (e) {}
     }
@@ -43,12 +50,27 @@ const Searcher = () => {
   function handleToChange({ value }) {
     setTo(value);
     if (fromValue) {
-      setToValue(convert(exchangeRates[value], fromValue));
+      setToValue(convert(exchangeRates[value], parseNumber(fromValue)));
     }
   }
-  function handleFromFieldChange({ target: { value } }) {
+
+  function parseFromValue({ target: { value } }) {
+    value = parseNumber(value);
+    value = `${value}`.replace(/\./g, ',');
     setFromValue(value);
-    setToValue(convert(exchangeRates[to], value));
+  }
+
+  function handleFromFieldChange({ target: { value } }) {
+    let display = `${value}`.replace(/\./g, ',');
+    setFromValue(display);
+
+    let parsed = `${value}`.replace(/\./g, '');
+    parsed = parsed.replace(/,/g, '.');
+
+    setToValue(convert(exchangeRates[to], parsed));
+  }
+  function formatFromValue() {
+    setFromValue(formatNumber(fromValue, from));
   }
   function convert(a, b) {
     let converted = parseFloat(a) * parseFloat(b);
@@ -82,7 +104,12 @@ const Searcher = () => {
         />
       </S.ControlsContainer>
       <S.FieldsContainer>
-        <S.SearcherField value={fromValue} onChange={handleFromFieldChange} />
+        <S.SearcherField
+          value={fromValue}
+          onChange={handleFromFieldChange}
+          onFocus={parseFromValue}
+          onBlur={formatFromValue}
+        />
         <Equals size={48} color="white" />
 
         <S.ConvertedValueLabel>{displayValue}</S.ConvertedValueLabel>

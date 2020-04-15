@@ -27,7 +27,7 @@ export const ControlsContainer = styled.div`
 
 export const FieldsContainer = styled.div`
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   align-items: center;
   justify-content: space-between;
 
@@ -38,7 +38,6 @@ export const FieldsContainer = styled.div`
   }
 
   ${media.lessThan('large')`
-    flex-direction: column;
     max-width: 400px;
     
   `}
@@ -74,9 +73,12 @@ export const SearcherField = styled.input`
 `;
 
 export const ConvertedValueLabel = styled.p`
-  font-size: 5rem;
+  font-size: 6rem;
   font-weight: bold;
   ${media.lessThan('large')`
+    font-size: 4rem;
+  `}
+  ${media.lessThan('medium')`
     font-size: 3rem;
   `}
 `;
