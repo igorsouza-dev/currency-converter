@@ -75,6 +75,7 @@ export const SearcherField = styled.input`
 export const ConvertedValueLabel = styled.p`
   font-size: 6rem;
   font-weight: bold;
+  word-break: break-all;
   ${media.lessThan('large')`
     font-size: 4rem;
   `}
